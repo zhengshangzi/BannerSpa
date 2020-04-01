@@ -27,17 +27,14 @@ var $bannerbox=(function(){
     var cfg={
         //组件的容器
         container:'#box',
+        //轮播切换的时长
         interval:3000
     }
     var $oNavlist=$bhtml.find('li');
     var index = 1;
     var timer;
     var isMoving = false;
-    function over(){
-        animate(left,{opacity:50})
-        animate(right,{opacity:50})
-        clearInterval(timer)
-    }
+    //切换下一张
     function next(){
         if(isMoving){
             return;
@@ -53,6 +50,7 @@ var $bannerbox=(function(){
             isMoving = false;
         });
     }
+    //切换上一张
     function prev(){
         if(isMoving){
             return;
@@ -68,6 +66,7 @@ var $bannerbox=(function(){
             isMoving = false;
         });
     }
+    //按钮切换事件
     function navmove(){
         for( var i=0; i<$oNavlist.length; i++ ){
             $oNavlist[i].className = "";
@@ -120,13 +119,21 @@ var $bannerbox=(function(){
         $.extend(cfg, conf);
         $(cfg.container).append($bhtml);
         $oNavlist[0].className="active";
-        $(cfg.container).mouseover(over);
+        //鼠标移入事件
+        $(cfg.container).mouseover(function(){
+            animate(left,{opacity:50})
+            animate(right,{opacity:50})
+            clearInterval(timer)
+        });
+        //鼠标移出事件
         $(cfg.container).mouseout(function(){
             animate(left,{opacity:0})
             animate(right,{opacity:0})
             timer = setInterval(next, cfg.interval);
         });
+        //点击切换下一张
         $(cfg.container).on('click','#right',next);
+        //点击切换上一张
         $(cfg.container).on('click','#left',prev);
         for( var i=0; i<$oNavlist.length; i++ ){
             (function(i){
